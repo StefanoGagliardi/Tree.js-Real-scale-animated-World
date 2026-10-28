@@ -1,0 +1,101 @@
+@layer components {
+  // Additional wrapper class, tag (div) that wrap "form" tag element
+  .form-wrapper {
+  }
+
+  // form.base-form
+  .base-form {
+    // Div that wrap "input" component, label, input text, error label ecc.
+    .input-group {
+      > label {
+      }
+      > div {
+        &.has-icon {
+          > div {
+            padding: 0 10px;
+          }
+        }
+        > input {
+        }
+        > textarea {
+        }
+
+        // Other div if input has an icon, this div contain svg icon
+        > div {
+          > span {
+            svg {
+              width: 20px;
+            }
+          }
+        }
+      }
+      input[type='text'],
+      input[type='email'] {
+        &::-webkit-input-placeholder {
+          /* Chrome/Opera/Safari */
+          @apply text-input;
+        }
+        &::-moz-placeholder {
+          /* Firefox 19+ */
+          @apply text-input;
+        }
+        &:-ms-input-placeholder {
+          /* IE 10+ */
+          @apply text-input;
+        }
+        &:-moz-placeholder {
+          /* Firefox 18- */
+          @apply text-input;
+        }
+      }
+      textarea {
+        &::-webkit-input-placeholder {
+          /* Chrome/Opera/Safari */
+          @apply text-input;
+        }
+        &::-moz-placeholder {
+          /* Firefox 19+ */
+          @apply text-input;
+        }
+        &:-ms-input-placeholder {
+          /* IE 10+ */
+          @apply text-input;
+        }
+        &:-moz-placeholder {
+          /* Firefox 18- */
+          @apply text-input;
+        }
+      }
+
+      textarea {
+        height: 140px;
+        max-height: 140px;
+        min-height: 140px;
+      }
+    }
+
+    &.row-label {
+      .input-group:not(.block) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        > div:first-child {
+          align-self: center;
+        }
+        > div:last-child {
+          align-self: center;
+        }
+      }
+    }
+
+    .input-error-label {
+      small {
+        color: #c50000;
+        font-weight: bold;
+      }
+    }
+  }
+
+  // form.theme-form-tag
+  .theme-form-tag {
+  }
+}

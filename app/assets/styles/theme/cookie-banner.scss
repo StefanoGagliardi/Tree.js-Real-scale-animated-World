@@ -1,0 +1,20 @@
+@layer components {
+  .banner-cookie-wrapper {
+    position: fixed;
+    bottom: 0;
+    height: 100px;
+    z-index: 998;
+
+    // transform: translateY(0px);
+    transition: 0.3s linear all;
+    opacity: 1;
+
+    &.hidden-banner {
+      opacity: 0;
+      z-index: -1;
+      // transform: translateY(-150px);
+      transition: 0.3s linear all;
+    }
+  }
+
+}

@@ -1,0 +1,352 @@
+/**
+ * Single service page components style
+ */
+@layer utilities {
+  .single-service-template {
+    // General heading, section or title
+    h2:not(.text-dark):not(.text-white),
+    h3:not(.text-dark):not(.text-white) {
+      // Color for D/L for heading
+      color: var(--color-text-accent);
+
+      // Icon color mask for D/L
+      &::before {
+        background-color: var(--color-text-accent);
+      }
+    }
+
+    h2:not(.text-dark):not(.text-white) {
+      @apply font-bold;
+      @apply text-lgm;
+      color: var(--color-text-accent);
+    }
+
+    // Classi section 6-6 text + image
+    .section-service {
+      .heading-icon {
+        display: grid;
+        grid-column-gap: 0.75em;
+        align-content: start;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        position: relative;
+
+        &.icon-website::before {
+          --ico-svg: url(data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%20class%3D%22icon-sitevitrine%22%20enable-background%3D%22new%200%200%20512%20512%22%3E%3Cpath%20class%3D%22color1%22%20d%3D%22M478.6%20337.8h-7V109.1h7c14.5%200%2026.2-11.7%2026.2-26.2%200-14.5-11.7-26.2-26.2-26.2h-33.2H282.2V32.2C282.2%2017.7%20270.5%206%20256%206c-14.5%200-26.2%2011.7-26.2%2026.2v24.5H66.1%2033.4c-14.5%200-26.2%2011.7-26.2%2026.2%200%2014.5%2011.7%2026.2%2026.2%2026.2H40v228.7h-6.5c-14.5%200-26.2%2011.7-26.2%2026.2%200%2014.5%2011.7%2026.2%2026.2%2026.2h32.7%20117.7l-48.3%2075.6c-7.8%2012.2-4.2%2028.4%208%2036.2%204.4%202.8%209.2%204.1%2014.1%204.1%208.6%200%2017.1-4.3%2022.1-12.1l66.3-103.8h20.1l66.3%20103.8c5%207.8%2013.5%2012.1%2022.1%2012.1%204.8%200%209.7-1.3%2014.1-4.1%2012.2-7.8%2015.8-24%208-36.2l-48.3-75.6h117.2%2033.2c14.5%200%2026.2-11.7%2026.2-26.2C504.8%20349.5%20493.1%20337.8%20478.6%20337.8zM92.3%20109.1h326.9v228.7H92.3V109.1z%22%2F%3E%3C%2Fsvg%3E%0D%0A) !important;
+        }
+        &.icon-ecommerce::before {
+          --ico-svg: url(data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%20class%3D%22icon-ecommerce%22%20enable-background%3D%22new%200%200%20512%20512%22%3E%3Cpath%20class%3D%22color1%22%20d%3D%22M493.6%20199c-5.1-6.4-12.8-10.1-20.9-10.1H393L325.5%2045.3c-6.3-13.3-22.2-19.1-35.5-12.8C276.7%2038.8%20271%2054.7%20277.3%2068L334%20188.9H178.4L235.2%2068c6.3-13.3%200.5-29.2-12.8-35.5%20-13.3-6.3-29.2-0.5-35.5%2012.8l-67.4%20143.6H39.3c-8.2%200-15.9%203.7-20.9%2010.1%20-5.1%206.4-6.9%2014.7-5%2022.7L70%20461.5c2.8%2012%2013.6%2020.5%2026%2020.5H416c12.4%200%2023.1-8.5%2026-20.5l56.7-239.8C500.5%20213.8%20498.7%20205.4%20493.6%20199zM136.3%20242.2c0%200%200.1%200%200.1%200%200%200%200.1%200%200.1%200H376c0%200%200.1%200%200.1%200%200%200%200.1%200%200.1%200H439l-10%2042.2H83l-10-42.2H136.3zM394.9%20428.7H117.1l-21.5-90.9h320.8L394.9%20428.7z%22%2F%3E%3C%2Fsvg%3E%0D%0A) !important;
+        }
+
+        &::before {
+          content: ' ';
+          display: inline-flex;
+          grid-row: 1;
+          grid-column: 1;
+
+          margin-top: 0;
+          font-size: 1.5em;
+          line-height: 1.8;
+          width: 2em;
+          height: 2em;
+          justify-self: center;
+          justify-content: center;
+          align-items: baseline;
+          background-color: var(--color-text-accent);
+          -webkit-mask-image: var(--ico-svg);
+          mask-image: var(--ico-svg);
+          -webkit-mask-size: 40%;
+          mask-size: 40%;
+          -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+          -webkit-mask-position: center;
+          mask-position: center;
+          z-index: 2;
+          opacity: 1;
+
+          content: ' ';
+          display: inline-flex;
+          grid-row: 1;
+          grid-column: 1;
+        }
+
+        --shadow-color: rgba(15, 25, 36, 0.15);
+        &::after {
+          content: ' ';
+          @apply bg-primary;
+          --ico-svg: url(data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%20512%20512%22%20xml%3Aspace%3D%22preserve%22%20class%3D%22icon-sitevitrine%22%20enable-background%3D%22new%200%200%20512%20512%22%3E%3Cpath%20class%3D%22color1%22%20d%3D%22M478.6%20337.8h-7V109.1h7c14.5%200%2026.2-11.7%2026.2-26.2%200-14.5-11.7-26.2-26.2-26.2h-33.2H282.2V32.2C282.2%2017.7%20270.5%206%20256%206c-14.5%200-26.2%2011.7-26.2%2026.2v24.5H66.1%2033.4c-14.5%200-26.2%2011.7-26.2%2026.2%200%2014.5%2011.7%2026.2%2026.2%2026.2H40v228.7h-6.5c-14.5%200-26.2%2011.7-26.2%2026.2%200%2014.5%2011.7%2026.2%2026.2%2026.2h32.7%20117.7l-48.3%2075.6c-7.8%2012.2-4.2%2028.4%208%2036.2%204.4%202.8%209.2%204.1%2014.1%204.1%208.6%200%2017.1-4.3%2022.1-12.1l66.3-103.8h20.1l66.3%20103.8c5%207.8%2013.5%2012.1%2022.1%2012.1%204.8%200%209.7-1.3%2014.1-4.1%2012.2-7.8%2015.8-24%208-36.2l-48.3-75.6h117.2%2033.2c14.5%200%2026.2-11.7%2026.2-26.2C504.8%20349.5%20493.1%20337.8%20478.6%20337.8zM92.3%20109.1h326.9v228.7H92.3V109.1z%22%2F%3E%3C%2Fsvg%3E%0D%0A) !important;
+          display: inline-flex;
+          grid-row: 1;
+          grid-column: 1;
+          margin-top: 0px;
+
+          width: 3em;
+          padding-bottom: 100%;
+          justify-self: center;
+          border-radius: 2.5em;
+          z-index: 1;
+          box-shadow:
+            0 2px 10px -2px var(--shadow-color, rgba(0, 0, 0, 0.1)),
+            0 8px 30px -5px var(--shadow-color, rgba(0, 0, 0, 0.1));
+        }
+
+        h2 {
+          grid-column: 2;
+          grid-row: 1;
+          margin: 15px 0px 15px 10px;
+        }
+      }
+
+      div[class^='col-span'] {
+        p:not(:first-child) {
+          grid-column: 1/3;
+          margin-bottom: 20px;
+          margin-block-start: 20px;
+          // color: var(--text-white);
+          @apply text-dark;
+          @apply dark:text-white;
+          @apply font-regular;
+          @apply text-paragraph;
+        }
+
+        p:not(:first-of-type) {
+          margin-block-start: 0;
+          color: var(--text-white);
+        }
+      }
+
+      .figure-wrapper {
+        // max-width: 30em;
+        margin: auto;
+        --accent-shadow: rgba(52, 104, 166, 0.5);
+        --shadow-color: rgba(15, 25, 36, 0.15);
+        --shadow-color: var(--accent-shadow);
+        img {
+          position: relative;
+          z-index: 1;
+          display: block;
+          box-shadow:
+            0 20px 40px -3px var(--shadow-color, rgba(0, 0, 0, 0.1)),
+            0 60px 70px -40px var(--shadow-color, rgba(0, 0, 0, 0.1));
+          --shadow-color: var(--accent-shadow);
+          opacity: 1;
+          border-radius: min(max(3em, 5vw), 6em);
+        }
+      }
+    }
+
+    // Center Banner width gradient
+    .cta-image-banner {
+      --bg-color: #fcfcfd;
+      --shadow-color: rgba(15, 25, 36, 0.15);
+      --shadow-color: var(--shadow);
+
+      // background-color: var(--bg-color);
+      @apply bg-gray-light-5;
+      @apply dark:bg-gray-1;
+
+      box-shadow:
+        0 20px 40px -3px var(--shadow-color, rgba(0, 0, 0, 0.1)),
+        0 60px 70px -40px var(--shadow-color, rgba(0, 0, 0, 0.1));
+      overflow: hidden;
+
+      border-radius: 1.5em;
+      z-index: 5;
+      position: relative;
+
+      > div[class^='col-span']:first-child {
+        // display: grid;
+        // align-items: center;
+        // background-color: var(--bg-color);
+
+        @apply bg-gray-light-5;
+        @apply dark:bg-gray-1;
+
+        color: var(--text-white);
+
+        z-index: 2 !important;
+        transform: perspective(0) translateZ(0);
+        font-size: 1.625em;
+        padding: max(0.5em, min(1vw, 1em)) max(1em, min(2vw, 2em));
+        box-sizing: border-box;
+
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        h3 {
+          font-size: 30px;
+          // color: #0f1924;
+          color: var(--text-white);
+          font-weight: 700;
+        }
+        p {
+          font-size: 18px;
+          font-weight: 500;
+          a {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      > div[class^='col-span']:last-child {
+        margin-left: -50%;
+        width: 150%;
+        z-index: 4;
+        figure {
+          -webkit-mask-image: linear-gradient(
+            270deg,
+            #000 40%,
+            rgba(0, 0, 0, 0.1) 80%,
+            rgba(0, 0, 0, 0) 100%
+          );
+          mask-image: linear-gradient(
+            270deg,
+            #000 40%,
+            rgba(0, 0, 0, 0.1) 80%,
+            rgba(0, 0, 0, 0) 100%
+          );
+        }
+      }
+    }
+  }
+
+  .single-service-template:not([class*='service-figure-width-']) {
+    .section-service {
+      .figure-wrapper {
+        max-width: 30em;
+      }
+    }
+  }
+
+  .focus-list {
+    margin: 0px;
+    padding: 0px;
+    li {
+      @apply dark:text-white;
+      @apply text-paragraph;
+      @apply flex;
+      @apply items-center;
+
+      color: var(--text-white);
+      margin-bottom: 20px;
+
+      svg {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        @apply dark:fill-accent;
+      }
+    }
+  }
+}
+
+/**
+ * Style for dark mode for service components
+ */
+.dark .single-service-template {
+  .heading-icon {
+    &::after {
+      @apply bg-secondary;
+    }
+  }
+
+  .figure-wrapper img {
+    -webkit-box-shadow:
+      inset 0 0 0 1px hsl(0deg 0% 100% / 20%),
+      0 4px 8px rgb(17 20 24 / 40%),
+      0 18px 46px 6px rgb(17 20 24 / 40%);
+    box-shadow:
+      inset 0 0 0 1px hsl(0deg 0% 100% / 20%),
+      0 4px 8px rgb(17 20 24 / 40%),
+      0 18px 46px 6px rgb(17 20 24 / 40%);
+  }
+}
+
+/**
+ * Service components taht could be use outside service template
+ */
+@layer components {
+  .focus-tag-grid {
+    .focus {
+      --ico-svg: url(data:image/svg+xml;charset=UTF-8,%3Csvg%20role%3D%22img%22%20aria-label%3D%22Logo%20simplifi%C3%A9%20Linkeo%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%22512px%22%20height%3D%22512px%22%20viewBox%3D%220%200%20512%20512%22%20enable-background%3D%22new%200%200%20512%20512%22%20class%3D%22icon-eo%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20class%3D%22color2%22%20d%3D%22M350.689%20313.505c66.993%2033.957%20130.384-15.806%20150.239-79.137%2020.972-66.937-4.273-158.225-71.853-186.178%20-57.247-23.709-112.512%2018.263-131.416%2070.371%20-1.006%202.178-1.843%204.58-2.458%207.261C280.709%20188.794%20284.646%20280.051%20350.689%20313.505zM411.399%20112.251c11.784%203.91%2016.336%2018.319%2020.051%2028.4%209.075%2024.63%2011.421%2050.489%205.39%2076.041%20-7.038%2029.88-33.622%2051.91-62.581%2033.818%20-11.562-7.233-14.382-27.423-17.229-39.319%20-5.39-22.396-2.849-45.546%202.261-67.719C366.831%20117.556%20384.759%20103.427%20411.399%20112.251z%22%3E%3C%2Fpath%3E%3Cpath%20class%3D%22color2%22%20d%3D%22M210.229%20301.05c36.387-22.451%203.044-79.946-33.566-57.382%20-29.601%2018.263-82.994%2024.961-98.269-15.387%20-0.922-2.374-1.759-5.026-2.569-7.792%2040.38-4.886%2080.704-10.22%20120.889-16.42%2015.722-2.401%2022.591-18.514%2024.407-32.03%204.915-36.833-5.725-75.119-30.578-102.653%20-39.124-43.34-115.694-30.83-153.841%205.25C-10.576%20119.372-2.59%20219.763%2026.034%20272.26%2061.164%20336.739%20155.803%20334.616%20210.229%20301.05zM91.938%20114.736c33.985-23.206%2054.901%200.615%2061.268%2028.958%20-27.311%203.966-54.678%207.624-82.101%2010.947C73.758%20137.747%2080.097%20122.834%2091.938%20114.736z%22%3E%3C%2Fpath%3E%3Cpath%20class%3D%22color2%22%20d%3D%22M467.502%20385.747c-122.677%2025.859-265.427%2024.491-388.829%202.709%20-41.888-7.428-59.816%2056.633-17.677%2064.061%20135.94%2024.016%20288.912%2025.832%20424.181-2.681C527.094%20440.985%20509.305%20376.923%20467.502%20385.747z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E);
+      grid-column-gap: 0.75em;
+      align-content: start;
+      grid-template-columns: auto 1fr;
+      --border-color: var(--fg-separator);
+      border: 1px solid var(--border-color);
+      --bg-color: var(--bg-block);
+      border-radius: 1.5em;
+      display: grid;
+      position: relative;
+      align-items: center;
+
+      margin: 10px 10px;
+      flex-grow: 1;
+      min-width: 275px; // 17em
+      box-sizing: border-box;
+      padding: max(0.5em, min(1vw, 1em)) max(1em, min(2vw, 2em));
+      z-index: 3;
+      font-weight: bold;
+
+      // Set max-width of item, so force max items per row to 3
+      // flex-grow: 1 - Fit all avaible space
+      // flex-shrink: 0 -
+      // flex-basis: 31% - like max-width. In case of 4 per row, first idea is to set "max-width" (flex-basis) to 25%, but this not take into account item spacing (es. 20px), so flex-basis a bit less of 100/n
+      flex: 1 0 31%;
+
+      &::before {
+        content: none !important;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--color-text-accent);
+      }
+    }
+
+    &.focus-text-inline .focus {
+      span {
+        width: 180px;
+        max-width: 200px;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .homepage .focus-tag-grid .focus {
+    margin-bottom: 30px;
+    cursor: pointer;
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    &.active-focus {
+      background: var(--color-text-accent);
+      svg {
+        fill: #2f343c;
+      }
+      span {
+        color: #2f343c;
+      }
+    }
+  }
+
+  .bg-service.bg-texture-grid {
+    background-image: url('/services/grid-bg-dark.png');
+    background-size: cover;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+  }
+
+  .dark {
+    .bg-service.bg-texture-grid {
+      background-image: url('/services/grid-bg-light.png');
+      background-color: var(--color-bg-service);
+      z-index: 9;
+    }
+  }
+}

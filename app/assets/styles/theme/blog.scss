@@ -1,0 +1,13 @@
+@layer components {
+  .post-lottie {
+    height: 300px;
+    width: 80%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-top: 30px;
+    margin-right: auto;
+    border: 0;
+  }
+}

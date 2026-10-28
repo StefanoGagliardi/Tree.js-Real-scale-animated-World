@@ -1,0 +1,116 @@
+@layer components {
+  .btn {
+    &.btn-components-outline {
+      background: rgba(59, 130, 246, 0.1);
+      border: 2px solid transparent;
+      border-color: var(--color-text-accent);
+
+      @apply font-medium;
+      @apply dark:text-white;
+
+      /* Remove outline*/
+      @apply focus:outline-none;
+
+      // Button spacing
+      @apply py-2;
+      @apply px-4;
+    }
+
+    &.btn-icon {
+      display: inline-flex;
+      align-items: center;
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--text-white);
+        margin-left: 20px;
+      }
+
+      &.icon-hover {
+        svg {
+          width: 0px;
+          transition: 0.3s linear width;
+        }
+        &:hover svg {
+          width: 20px;
+          transition: 0.3s linear width;
+        }
+      }
+    }
+
+    &.btn-link {
+      background: transparent;
+      border: 2px solid transparent;
+
+      @apply font-medium;
+      @apply dark:text-white;
+
+      /* Remove outline*/
+      @apply focus:outline-none;
+
+      // Button spacing
+      @apply py-2;
+      @apply px-4;
+
+      &.btn-link-primary {
+        color: var(--color-text-accent);
+        svg {
+          fill: var(--color-text-accent);
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
+
+    &.pl-0 {
+      padding-left: 0px;
+    }
+  }
+
+  /* 
+  Tailwind CSS Not have button componenet for free (just in their paid UI) 
+  To avoid this is possible re-create button with a lot of tailwind css classes.
+  So i decied to rewrap this amount of class in a single one via @apply directive of tailwind
+*/
+  .btn.btn-primary {
+    /* Display icon inline*/
+    @apply inline-flex;
+
+    /* Button colors */
+    @apply bg-blue-700;
+    @apply hover:bg-blue-800;
+    @apply focus:ring-blue-300;
+
+    /* Text props */
+    @apply text-white;
+    @apply focus:ring-4;
+    @apply font-medium;
+    @apply text-sm;
+
+    /* Spacing */
+    @apply px-5 py-2.5 mr-2 mb-2;
+
+    /* border-radius*/
+    @apply rounded-lg;
+
+    /* Remove outline*/
+    @apply focus:outline-none;
+
+    /* Dark mode */
+    @apply dark:bg-blue-600;
+    @apply dark:hover:bg-blue-700;
+    @apply dark:focus:ring-blue-800;
+    @apply dark:text-white;
+
+    /* Set z-index relative to dots background */
+    @apply relative;
+    @apply z-10;
+  }
+
+  .btn.btn-primary svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--text-dark);
+    margin-left: 20px;
+  }
+}

@@ -1,0 +1,233 @@
+/* :root {
+  @apply light;
+} */
+
+[data-theme="dark"],
+.dark {
+  --color-bg-primary: #2d3748;
+  --color-bg-primary-inverted: #fff;
+  --color-bg-secondary: #2f343c;
+  --color-bg-service: #edf2f7;
+  --color-bg-cta-start: #81e6d9;
+  --color-bg-cta-stop: #2b6cb0;
+  --color-text-primary: #f7fafc;
+  --color-text-secondary: #0e73fb;
+
+  /* Accent2 just for light version, in dark is equal to --color-text-accent */
+  --color-bg-accent: #8abbff;
+  --color-bg-accent2: #8abbff;
+  /* Accent2 just for light version, in dark is equal to --color-text-accent */
+  --color-text-accent: #8abbff; /* #81e6d9 - verde acqua chiaro */
+  --color-text-accent2: #8abbff;
+
+  --accents-0: #212529;
+  --accents-1: #343a40;
+  --accents-2: #495057;
+  --accents-3: #868e96;
+  --accents-4: #adb5bd;
+  --accents-5: #ced4da;
+  --accents-6: #dee2e6;
+  --accents-7: #e9ecef;
+  --accents-8: #f1f3f5;
+  --accents-9: #f8f9fa;
+  --color-green-light: #b7f0ed;
+  --color-green-dark: #05baca;
+
+  /* Gray */
+  --color-gray-1: #5f6b7c;
+  --color-gray-2: #738091;
+  --color-gray-3: #8f99a8;
+  --color-gray-4: #abb3bf;
+  --color-gray-5: #c5cbd3;
+
+  /* Dark Gray */
+  --color-dark-gray-1: #1c2127;
+  --color-dark-gray-2: #252a31;
+  --color-dark-gray-3: #2f343c;
+  --color-dark-gray-4: #383e47;
+  --color-dark-gray-5: #404854;
+
+  /* Light Gray */
+  --color-light-gray-1: #d3d8de;
+  --color-light-gray-2: #dce0e5;
+  --color-light-gray-3: #e5e8eb;
+  --color-light-gray-4: #edeff2;
+  --color-light-gray-5: #f6f7f9;
+
+  /* Page specific */
+  --color-contacts-bg: transparent;
+  --contact-svg-fill: #8abbff;
+
+  /* Service */
+  --color-bg-service: #383e47;
+
+  /* Input background */
+  --bg-input: #1f2329;
+  --bg-input-gray: #f1f4f7;
+  --color-input: #f6f7f9;
+
+  /* Dark / light */
+  --text-white: #fff;
+  --text-dark: #111;
+  --color-text-dark: #fff;
+
+  /* Common */
+  --footer-bg: var(--color-dark-gray-2);
+  --socket-bg: var(--color-dark-gray-1);
+  --header-bg: rgba(28, 33, 39, 0.9);
+
+  /* Display helper */
+  --show-dark-in-light: block;
+
+  /* 
+    Scrollbar page Background color, make strong bg difference on Dark mode than page background
+    NOT USE SAME DARK COLOR (scrollbar background and section page background): 
+      beacuse same color deceives and makes header appear shorter
+  */
+  --scrollbar-bg-bar: #1e1e1e;
+
+  /* Mouse cursor circle color */
+  --cursor-color: #8abbff;
+
+  /* Input text prefix like input for url, prefix is https:// */
+  --color-input-prefix: #f6f6f6;
+
+  /**
+   * Undraw icon color
+   */
+  --undraw-color: #8abbff;
+}
+
+[data-theme="light"],
+.light {
+  /* Tailwind override */
+  --color-bg-primary: #fff;
+  --color-bg-primary-inverted: #2d3748;
+  --color-bg-secondary: #edf2f7;
+  --color-bg-cta-start: #81e6d9;
+  --color-bg-cta-stop: #2b6cb0;
+  --color-text-primary: #2d3748;
+  --color-text-secondary: #0e73fb;
+  /* Background color equal to --color-text-accent(2) */
+  --color-bg-accent: #1663c1;
+  --color-bg-accent2: #0a2540;
+  /* Text color */
+  --color-text-accent: #1663c1;
+  --color-text-accent2: #0a2540;
+
+  --accents-0: #f8f9fa;
+  --accents-1: #f1f3f5;
+  --accents-2: #e9ecef;
+  --accents-3: #dee2e6;
+  --accents-4: #ced4da;
+  --accents-5: #adb5bd;
+  --accents-6: #868e96;
+  --accents-7: #495057;
+  --aqccents-8: #343a40;
+  --accents-9: #212529;
+  --color-green-light: #b7f0ed;
+  --color-green-dark: #05baca;
+
+  /* Gray */
+  --color-gray-1: #5f6b7c;
+  --color-gray-2: #738091;
+  --color-gray-3: #8f99a8;
+  --color-gray-4: #abb3bf;
+  --color-gray-5: #c5cbd3;
+
+  /* Dark Gray */
+  --color-dark-gray-1: #1c2127;
+  --color-dark-gray-2: #252a31;
+  --color-dark-gray-3: #2f343c;
+  --color-dark-gray-4: #383e47;
+  --color-dark-gray-5: #404854;
+
+  /* Light Gray */
+  --color-light-gray-1: #d3d8de;
+  --color-light-gray-2: #dce0e5;
+  --color-light-gray-3: #e5e8eb;
+  --color-light-gray-4: #edeff2;
+  --color-light-gray-5: #f6f7f9;
+
+  /* Dark / light */
+  --text-white: #111;
+  --text-dark: #fff;
+  --color-text-dark: #333;
+
+  /* Service */
+  --color-bg-service: #edf2f7;
+
+  /* Page specific */
+  --color-contacts-bg: #f6f9fc;
+  --contact-svg-fill: #635bff;
+
+  /* Input background */
+  --bg-input: #ffffff;
+  --bg-input-gray: #f1f4f7;
+  --color-input: #1f2329;
+
+  /* Common parts */
+  --footer-bg: #fff;
+  --socket-bg: #fff;
+  --header-bg: rgba(255, 255, 255, 0.7);
+
+  /* Display */
+  --show-dark-in-light: block;
+
+  /* Scrollbar page Background color */
+  --scrollbar-bg-bar: #dbe6f7;
+
+  /* Mouse cursor circle color */
+  --cursor-color: #9333ea;
+
+  /* Input text prefix like input for url, prefix is https:// */
+  --color-input-prefix: #f6f6f6;
+
+  /**
+   * Undraw icon color
+   */
+  --undraw-color: #8abbff;
+}
+
+/**
+ * Custom css variable not used by Tailwind
+ */
+:root {
+  --font-avenir: "avenir next", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  font-feature-settings: "case" 1, "rlig" 1, "calt" 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  font-family: var(--font-avenir);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-service);
+  color: var(--text-primary);
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  margin: 0;
+}
+
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "avenir next";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./../fonts/avenir-regular.woff2") format("woff2"), url("./../fonts/avenir-regular.woff") format("woff");
+}
+@font-face {
+  font-family: "avenir next";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("./../fonts/avenir-medium.woff2") format("woff2"), url("./../fonts/avenir-medium.woff") format("woff");
+}
+@font-face {
+  font-family: "avenir next";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("./../fonts/avenir-demi.woff2") format("woff2"), url("./../fonts/avenir-demi.woff") format("woff");
+}

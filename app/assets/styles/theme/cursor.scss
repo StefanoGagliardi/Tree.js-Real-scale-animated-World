@@ -1,0 +1,50 @@
+@layer components {
+  .cursore-uq {
+    width: 6px;
+    height: 6px;
+    top: -2px;
+    left: -2px;
+    border-radius: 100%;
+    background-color: var(--cursor-color);
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000; // Banner-cookie 999
+    animation: cursor_opacity 2s;
+
+    // Add this class when cursor in on Link element
+    &.hover {
+      opacity: 0.5 !important;
+
+      &::after {
+        opacity: 1;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+
+  .cursore-uq:after {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 100%;
+    background-color: var(--cursor-color);
+    opacity: 0.2;
+    left: 50%;
+    top: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+  }
+  .cursore-uq svg {
+    position: relative;
+    left: -14px;
+    top: -16px;
+    transform: rotate(-90deg);
+    opacity: 1;
+    transition: all 0.1s;
+  }
+  .cursore-uq .radial-progress-cover {
+    stroke: var(--cursor-color);
+  }
+}

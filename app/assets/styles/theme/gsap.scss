@@ -1,0 +1,20 @@
+/**
+ * Set initial state of gsap
+ */
+.navbar-item {
+  opacity: 0;
+
+  &.navbar-item-element {
+    position: relative;
+    display: inline-block;
+    color: #222;
+  }
+}
+
+.dark {
+  .navbar-item {
+    &.navbar-item-element {
+      color: #fff;
+    }
+  }
+}

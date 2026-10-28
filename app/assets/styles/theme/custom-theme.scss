@@ -1,0 +1,86 @@
+/* Theme imports */
+@import './service.scss';
+@import './typography.scss';
+@import './forms.scss';
+@import './button.scss';
+@import './components.scss';
+@import './gsap.scss';
+@import './cursor.scss';
+@import './cookie-banner.scss';
+@import './modal-overlay.scss';
+@import './helpers.scss';
+@import './blog.scss';
+@import './pages.scss';
+
+@layer utilities {
+  .dot-divider::before {
+    --dot-size: 4px;
+    content: ' ';
+    border-radius: 50%;
+    position: absolute;
+
+    background: #fff;
+    background-color: #fff;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    right: calc(10px - (var(--dot-size) / 2));
+    // top: calc(50% - ( var(--dot-size) / 2 ) );
+    top: 50%;
+  }
+}
+
+/* Background image with minimal dots */
+#dotsBackground {
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  right: 0%;
+  bottom: auto;
+  z-index: 1;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('https://assets.website-files.com/61d37706dd5cb102dcf86fcd/61d8b013f51a979a2f4f49ba_Union.png');
+  background-position: 0px 0px;
+  background-size: cover;
+  background-attachment: scroll;
+  mix-blend-mode: lighten;
+}
+
+/* 
+  Change dot image background blend mode when site is in light mode 
+  Supported on all Browser -  Safari and Opera not support this on SVG but on other element yes.
+*/
+.light #dotsBackground {
+  mix-blend-mode: difference;
+}
+
+/* User selection color. Es. text highlight */
+::-moz-selection {
+  /* Code for Firefox */
+  /* color: red; */
+  color: #fff;
+  background: #0e73fb;
+}
+
+::selection {
+  /* color: red; */
+  color: #fff;
+  background: #0e73fb;
+}
+
+// main > * {
+//   user-select: none; /* supported by Chrome and Opera */
+//   -webkit-user-select: none; /* Safari */
+//   -khtml-user-select: none; /* Konqueror HTML */
+//   -moz-user-select: none; /* Firefox */
+//   -ms-user-select: none; /* Internet Explorer/Edge */
+// }
+
+.disable-select {
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}

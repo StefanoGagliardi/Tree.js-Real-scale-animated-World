@@ -1,0 +1,24 @@
+@layer utilities {
+  // main > * {
+  //   user-select: none; /* supported by Chrome and Opera */
+  //   -webkit-user-select: none; /* Safari */
+  //   -khtml-user-select: none; /* Konqueror HTML */
+  //   -moz-user-select: none; /* Firefox */
+  //   -ms-user-select: none; /* Internet Explorer/Edge */
+  // }
+
+  .disable-select {
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+  }
+
+  .border-debug1 {
+    border: 1px solid red;
+  }
+  .border-debug2 {
+    border: 2px solid blue;
+  }
+}

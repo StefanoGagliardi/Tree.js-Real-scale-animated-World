@@ -1,0 +1,186 @@
+/** defaultSection */
+.defaultSection {
+  padding: 60px 0px;
+}
+
+/* First section */
+.firstSection {
+  // height: calc(100vh - 0px);
+  background: transparent;
+  // padding-top: 160px;
+  position: relative;
+  // padding-top: 200px;
+  padding-top: 0px !important;
+  &::after {
+    // content: ' ';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: #0a2540;
+    width: 100%;
+    height: 400px;
+    z-index: 0;
+  }
+
+  .secondRow {
+    pointer-events: auto;
+    display: flex;
+  }
+  .firstRow {
+    display: flex;
+    margin-bottom: 180px;
+  }
+
+  // Globe bg section
+  .sectionMask {
+    // position: absolute;
+    // width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    .sectionBackgroundMask {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .sectionBackground {
+      position: relative;
+      height: 100%;
+      max-height: none;
+      width: 100%;
+      top: 0;
+      left: 0;
+      transform-origin: 100% 0;
+      // transform: skewY(-4deg);
+      background: #0a2540;
+      overflow: hidden;
+
+      z-index: 1;
+    }
+
+    .guides {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding: 0 16px;
+      pointer-events: none;
+
+      .guideContainer {
+        display: grid;
+        grid: 1fr / repeat(4, 1fr);
+        position: relative;
+        // max-width: var(--layoutWidth);
+        height: 100%;
+        margin: 0 auto;
+      }
+
+      .guide {
+        width: 1px;
+        background: linear-gradient(
+          180deg,
+          rgba(66, 71, 112, 0.3),
+          rgba(66, 71, 112, 0.3) 50%,
+          transparent 0,
+          transparent
+        );
+        background-size: 1px 8px;
+      }
+    }
+  }
+
+  .contentContainer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    // margin-top: 300px;
+  }
+
+  .content {
+    padding: 300px 0px 120px 0px;
+  }
+
+  .pointerAuto {
+    pointer-events: auto !important;
+  }
+}
+
+// Second Section
+
+.secondSection {
+  // min-height: 600px;
+
+  .sectionTitle {
+    max-width: 80%;
+  }
+
+  .colHead {
+    margin-bottom: 30px;
+  }
+
+  .colBody p:first-child {
+    margin-bottom: 30px;
+  }
+
+  .webCard {
+    max-width: 80%;
+    background: #dbf0fb;
+    padding: 30px;
+    border-radius: 10px;
+    display: block;
+    width: 80%;
+    margin: auto;
+
+    filter: drop-shadow(0 0 4px rgba(219, 240, 251, 0.99));
+    transition: all 200ms;
+
+    h3 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    ul {
+      margin-bottom: 20px;
+      padding-left: 30px;
+      li {
+        position: relative;
+        &::before {
+          content: ' ';
+          height: 2px;
+          background-color: var(--color-text-secondary);
+          width: 10px;
+          position: absolute;
+          left: -30px;
+          top: 13px;
+        }
+        &:not(:last-child) {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}
+// Third Section
+.thirdSection {
+  background: #edf1f3;
+}
+
+// Fourth Section
+.fourthSection {
+}
+
+// Fifth Section
+.fifthSection {
+  background: #edf1f3;
+}
+
+// Six Section
+.sixSection {
+}
