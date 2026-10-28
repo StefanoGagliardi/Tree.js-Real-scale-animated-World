@@ -1,5 +1,11 @@
 # Is not front-end
 
+
+<p align="center">
+  <img src="./public/globe-promo.png" alt="Class Invocation Stack Flowchart" style="text-align: center; margin-left: auto; margin-right: auto; border-radius: 8px; width: 100%;" />
+</p>
+
+
 This repo contain two thing, Globe component code and component demo.
 Globe component is pure vanilla javascript on Typescript. 
 
@@ -54,3 +60,16 @@ For instance, there was a custom texture composed of small dots covering the lan
 A month ago, the Palantir blog published a series of articles focusing on this very globe, crediting Stripe and GitHub for setting the standard. Palantir even used it as a foundation for their own software in the military sector—incorporating real-time satellite coverage, zoom-to-satellite-view capabilities, simulations of military decisions, and AI-powered tracking of enemy assets, complete with a real-time day/night cycle. I felt a surge of frustration with myself—yet another insight I’d had, but never followed through on, only to see it adopted by industry giants later on. So, even though I’m the second person to do this, I’m going to create a series about what made me fall in love with this study—specifically, the reverse engineering of a component—and the wealth of things I’ve learned.
 
 **@TODO ADD LINK MEDIUM WITH POST**
+
+## Class invokation stack
+
+This image summarizes the execution flow and the order in which classes and methods are invoked:
+
+<p align="center">
+  <img src="./docs/globe_functions_flow-svg_bg.svg" alt="Class Invocation Stack Flowchart" style="background-color: #ffffff; padding: 10px; border-radius: 8px; width: 100%;" />
+</p>
+---
+
+## GitHub Repository
+
+🔗 [StefanoGagliardi/Tree.js-Real-scale-animated-World](https://github.com/StefanoGagliardi/Tree.js-Real-scale-animated-World)

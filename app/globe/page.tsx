@@ -38,26 +38,21 @@ export default function GlobePage() {
             <div className={cn(s.content)}>
               <div className={cn(s.firstRow)}>
                 <div className={cn("col-span-2", s.pointerAuto)}>
-                  <span className="block text-secondary font-bold text-base mb-3">
-                    Blockchain & Smart Contract consultanting
+                  <span className="block text-white font-bold text-base mb-3">
+                    Advance WeblGl globe render.
                   </span>
                   <h1 className="text-white text-xl font-bold mb-5">
-                    Il tuo partner per il
-                    <br />
-                    prossimo grande salto
+                    Not for front-end dev :)
                   </h1>
                   <h2 className="text-white text-lg font-semibold">
-                    Portiamo strategie, design e tecnologie per consegnare
-                    <br />
-                    piattaforme ed esperienze che guidino
-                    <br /> la trasformazione digitale
+                    Advanced frontend web coding for real globe simulation
                   </h2>
                 </div>
               </div>
               <div className={cn(s.secondRow)}>
                 <div className="">
-                  <h3 className="text-secondary font-bold text-lg mb-4">
-                    Blockchain
+                  <h3 className="text-white font-bold text-lg mb-4">
+                    Future
                   </h3>
                   <p className="text-white font-regular text-base">
                     Our Blockchain <strong>consulting services</strong> help
@@ -67,33 +62,8 @@ export default function GlobePage() {
                 </div>
                 <div className="">
                   <h3 className="text-secondary font-bold text-lg mb-4">
-                    Web3
+                    Globe use
                   </h3>
-                  <p className="text-white font-regular text-base">
-                    Our Blockchain <strong>consulting services</strong> help
-                    shape your idea into a viable product, leveraging the
-                    expertise of leaders in distributed ledger technologies.
-                  </p>
-                </div>
-                <div className="">
-                  <h3 className="text-secondary font-bold text-lg mb-4">
-                    Web Augmented Reality
-                  </h3>
-                  <p className="text-white font-regular text-base">
-                    Our Blockchain <strong>consulting services</strong> help
-                    shape your idea into a viable product, leveraging the
-                    expertise of leaders in distributed ledger technologies.
-                  </p>
-                </div>
-                <div className="">
-                  <h3 className="text-secondary font-bold text-lg mb-4">
-                    WebGL for AR App or Games
-                  </h3>
-                  <p className="text-white font-regular text-base">
-                    Our Blockchain <strong>consulting services</strong> help
-                    shape your idea into a viable product, leveraging the
-                    expertise of leaders in distributed ledger technologies.
-                  </p>
                 </div>
               </div>
             </div>
