@@ -2,7 +2,6 @@ import { Group, Scene, Texture, Vector2, Vector3, WebGLRenderer } from 'three';
 import GlobeClassInterface, { LoadingPhase } from './GlobeTypes';
 import { CountryCoords } from './GlobeHelpers';
 import { DISABLE_FILL, DISABLE_LINES, IS_STATIC } from './GlobeConfig';
-import { ImageLoader } from 'next/image';
 import DrawLinesClass from './GlobeClassLine';
 
 /**
@@ -48,20 +47,21 @@ abstract class GlobeClassAbstract implements GlobeClassInterface {
    *  2. define [Direction, length] - Length will always be the Euclidean distance
    *  3. Simple number pair store
    */
-  public mouse: Vector2;
+  public mouse!: Vector2;
 
   /**
-   * Three WebGLRendere Object - https://threejs.org/docs/#api/en/renderers/WebGLRenderer
+   * WebGL Renderer - https://threejs.org/docs/#api/en/renderers/WebGLRenderer
    * The WebGL renderer displays your beautifully crafted scenes using WebGL.
+   * Istanziato in GlobeClass.addRenderer() tramite: new WebGLRenderer({ antialias: false, alpha: true })
    */
-  public renderer: WebGLRenderer;
+  public renderer!: WebGLRenderer;
 
   /**
-   * Three Scene Object - https://threejs.org/docs/#api/en/scenes/Scene
-   * Scenes allow you to set up what and where is to be rendered by three.js.
-   * This is where you place objects, lights and cameras.
+   * Three.js Scene - https://threejs.org/docs/#api/en/scenes/Scene
+   * Definisce il contenitore per tutti gli oggetti, le luci e le camere della scena 3D.
+   * Istanziata in GlobeClass.addRenderer() tramite: new Scene()
    */
-  public scene: Scene;
+  public scene!: Scene;
 
   /**
    * Three container for all scene Object
@@ -100,6 +100,7 @@ abstract class GlobeClassAbstract implements GlobeClassInterface {
   public globeFillMaterial: any;
   public globeFillSphere: any;
   public globeFill: any;
+  public europeBorders: any;
   public globeSegments: any;
   public windowW: any;
   public windowH: any;
@@ -201,8 +202,11 @@ abstract class GlobeClassAbstract implements GlobeClassInterface {
     this.disableGlobeFill = DISABLE_FILL; // DEFAULT: FALSE
     this.disableGlobeLines = DISABLE_LINES; // DEFAULT: FALSE
     this.mouse = new Vector2();
-    this.renderer = new WebGLRenderer({ antialias: !1, alpha: !0 });
-    this.scene = new Scene();
+    // NOTA: renderer e scene NON vengono istanziati qui.
+    // La classe astratta dichiara il contratto (tipo della proprietà),
+    // mentre GlobeClass.addRenderer() è responsabile dell'istanziazione concreta:
+    //   this.renderer = new WebGLRenderer({ antialias: false, alpha: true })
+    //   this.scene    = new Scene()
 
     // this.globeContainer = new Group(); // = 0
     // this.globeMap = 0;

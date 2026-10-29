@@ -12,7 +12,7 @@ La cartella è organizzata separando definizioni astratte, implementazioni concr
 ```
 components/three/globe/
 ├── GlobeTypes.ts             # Interfacce TypeScript, definizioni dei tipi e stati di caricamento
-├── GlobeConfig.ts            # Flag di configurazione globale (densità, statico, debug fill/lines)
+├── GlobeConfig.ts            # Flag di configurazione (densità, statico, debug, confini europei, frequenza archi)
 ├── GlobeHelpers.ts           # Costanti matematiche, curve di easing, coordinate paesi, geodesica P()
 ├── GlobeClassAbstract.ts     # Classe astratta base del coordinatore (Renderer, Camera, Scene, Group)
 ├── GlobeClass.ts             # Orchestratore del ciclo di vita WebGL, loop di rendering, input ed eventi
@@ -20,8 +20,12 @@ components/three/globe/
 ├── GlobeClassDots.ts         # Generazione punti su sfera di Fibonacci, maschera 2D Canvas e Shader GLSL
 ├── GlobeClassLineAbstract.ts # Classe astratta estesa da Three.Group per gli archi di collegamento
 ├── GlobeClassLine.ts         # Archi di Bézier 3D, TubeGeometry, cerchi di approdo e Shader di scorrimento
+├── GlobeEuropeBorders.ts     # Vettorizzazione 3D dei confini europei da GeoJSON (LineSegments batched)
 ├── DrawLinesClass.ts         # Implementazione alternativa standalone di GlobeClassLine
 └── index.ts                  # Entrypoint del modulo
+
+public/globe/
+└── europe.geojson            # Dati vettoriali dei confini poligonali dei 51 stati europei
 ```
 
 ---
@@ -40,6 +44,7 @@ graph TD
     F --> G["GlobeDotsGroup (extends GlobeClassDotsAbstract : Group)"]
     D --> H["Group: linesContainer"]
     H --> I["DrawLinesClass (extends GlobeClassLineAbstract : Group)"]
+    D --> L["GlobeEuropeBorders (extends Group : LineSegments)"]
 ```
 
 ### Ciclo di Vita del Componente
@@ -270,7 +275,55 @@ Due dischi `PlaneGeometry` orientati verso il centro della terra con `.lookAt(0,
 
 ---
 
-## 5. Azioni Utente e Fisica dell'Inerzia (`GlobeClass.ts`)
+## 5. Tracciamento Vettoriale dei Confini Europei (`GlobeEuropeBorders.ts`)
+
+Per arricchire la rappresentazione geografica mantenendo inalterata la nuvola di punti della terraferma, il modulo `GlobeEuropeBorders` sovrappone i confini politici degli stati europei mediante linee vettoriali sottili (`LineSegments`) ad alte prestazioni.
+
+### A. Parsing e Struttura dei Dati GeoJSON (`europe.geojson`)
+I dati geografici dei confini provengono da un GeoJSON vettoriale memorizzato in `public/globe/europe.geojson`. Il file descrive i perimetri dei 51 stati europei tramite geometrie poligonali:
+* **`Polygon`**: Singolo anello o sequenza di anelli concentrici (confine esterno ed eventuali enclavi/isole).
+* **`MultiPolygon`**: Insieme disgiunto di poligoni per nazioni frammentate (es. isole greche, arcipelago britannico, enclavi).
+
+Ogni anello (LinearRing) è rappresentato da una serie ordinata di coordinate geografiche geodetiche:
+$$P_i = [\lambda_i, \phi_i] = [\text{Longitudine}_i, \text{Latitudine}_i]$$
+
+### B. Segmentazione Lineare e Conversione Cartesiana 3D
+Per ogni coppia di punti adiacenti $P_i$ e $P_{i+1}$ lungo il perimetro dell'anello poligonale, viene calcolato un segmento di retta tridimensionale nello spazio della sfera:
+$$\vec{V}_1 = \text{coordsToVector3D}(\phi_i, \lambda_i, R_{\text{borders}})$$
+$$\vec{V}_2 = \text{coordsToVector3D}(\phi_{i+1}, \lambda_{i+1}, R_{\text{borders}})$$
+
+Le coordinate cartesiane corrispondenti sono ricavate tramite:
+$$\theta = (90^\circ - \phi) \cdot \frac{\pi}{180}, \quad \psi = \lambda \cdot \frac{\pi}{180}$$
+$$X = -R_{\text{borders}} \cdot \sin(\theta) \cdot \cos(\psi)$$
+$$Y = R_{\text{borders}} \cdot \cos(\theta)$$
+$$Z = R_{\text{borders}} \cdot \sin(\theta) \cdot \sin(\psi)$$
+
+### C. Elevazione Radiale Anti-Z-Fighting
+Se i segmenti fossero tracciati esattamente sul raggio $R$ del globo, la coincidenza radiale con i dischi dei nodi della terraferma causerebbe il fenomeno di *Z-Fighting* (sfarfallio e compenetrazione parziale tra vertici complanari).
+Per garantire un profilo nitido e continuo, i confini vengono estrusi a una quota radiale leggermente superiore:
+$$R_{\text{borders}} = 1.0012 \cdot R_{\text{globe}}$$
+Questo scostamento del $+0.12\%$ garantisce che le linee fluttuino impercettibilmente sopra la mesh dei punti, rimanendo sempre visibili da ogni angolo d'inclinazione.
+
+### D. Ottimizzazione delle Prestazioni GPU (Single Draw Call)
+Invece di istanziare oggetti `Line` o `Mesh` separati per ogni nazione, tutti i segmenti dell'intero continente europeo vengono accorpati in un unico buffer continuo `Float32BufferAttribute`:
+```typescript
+const geometry = new BufferGeometry();
+geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+```
+La resa visiva impiega `LineSegments` combinato con `LineBasicMaterial`:
+* **Colore**: `#38bdf8` (Azzurro Sky-400, brillante e perfettamente intonato alla palette tech di Stripe).
+* **Trasparenza**: `transparent: true`, con opacità nominale `0.65`.
+* **Profondità**: `depthWrite: false`, per evitare che la linea scriva nel depth buffer occludendo altri elementi trasparenti retrostanti.
+* **Draw Call**: L'intero reticolo dei confini europei richiede **1 sola Draw Call** GPU, con impatto prestazionale praticamente nullo su CPU e GPU.
+
+### E. Sincronizzazione con il Ciclo di Vita del Globo
+`GlobeEuropeBorders` estende la classe `Group` di Three.js ed è ancorato direttamente a `this.globeContainer`:
+1. **Trasformazioni Spaziali**: Condivide in tempo reale le rotazioni sull'asse $X$ e $Y$, rispondendo al drag manuale dell'utente e all'inerzia fisica (`throwGlobe`).
+2. **Reveal Animation**: All'avvio, l'opacità delle linee parte da $0$ e sfuma progressivamente fino al valore a regime mediante la funzione `setOpacity(animationDelta)` sincronizzata con la curva `easeOutQuart`.
+
+---
+
+## 6. Azioni Utente e Fisica dell'Inerzia (`GlobeClass.ts`)
 
 Il componente gestisce interazioni naturali tramite mouse e touch screen con smorzamento inerziale:
 
@@ -298,7 +351,28 @@ Quando l'utente rilascia il mouse o solleva il dito (`mouseup` / `touchend`), l'
 
 ---
 
-## 6. Riepilogo Formule Matematiche e Costanti Chiave
+## 7. Frequenza, Durata e Configurazione Dinamica degli Archi (`GlobeConfig.ts`)
+
+La generazione degli archi di collegamento non è più rigida ma parametrata centralmente in `GlobeConfig.ts`:
+
+```typescript
+export const LINE_INTERVAL_MS: number = 600;   // Frequenza di generazione (intervallo di spawn in ms)
+export const LINE_LIFETIME_MS: number = 3000;  // Durata di vita dell'arco prima dell'animazione di riassorbimento
+export const LINES_PER_CYCLE: number = 1;      // Quanti archi generare ad ogni tick di intervallo
+export const STATIC_LINE_COUNT: number = 8;    // Numero di archi fissi generati se IS_STATIC = true
+export const ENABLE_EUROPE_BORDERS: boolean = true; // Attivazione/disattivazione confini europei
+```
+
+### Relazione Dinamica Quantità / Frequenza
+Il numero medio di archi contemporaneamente visibili a regime sul globo ($\bar{N}_{\text{linee}}$) segue la relazione:
+$$\bar{N}_{\text{linee}} = \left\lceil \frac{\text{LINE\_LIFETIME\_MS}}{\text{LINE\_INTERVAL\_MS}} \right\rceil \cdot \text{LINES\_PER\_CYCLE}$$
+
+* **Con i parametri correnti** ($3000\text{ms} / 600\text{ms} \cdot 1$): sul globo sono sempre presenti circa **$5$ archi attivi e visibili** in vari stadi di animazione (espansione, scorrimento scia UV e riassorbimento).
+* Modificando questi valori è possibile passare istantaneamente da un look minimale a una visualizzazione ad alto traffico.
+
+---
+
+## 8. Riepilogo Formule Matematiche e Costanti Chiave
 
 | Simbolo / Funzione | Formula / Valore | Ruolo / Scopo |
 | :--- | :--- | :--- |
@@ -310,5 +384,8 @@ Quando l'utente rilascia il mouse o solleva il dito (`mouseup` / `touchend`), l'
 | **Proiezione Inversa V** | $0.5 + \arcsin(v_y) / \pi$ | Campionamento ordinata texture 2D della mappa |
 | **Distanza Geodetica** | $2 \arcsin\left(\sqrt{\sin^2(\Delta\text{lat}/2) + \dots}\right)$ | Arco di Grande Cerchio tra due città |
 | **Bézier Clamp Offset** | $\text{clamp}(0.5 \cdot \|\vec{P}_1 - \vec{P}_2\|, 160, 500)$ | Quota di elevazione radiale dell'arco |
+| `R_borders` | $1.0012 \cdot R_{\text{globe}}$ | Quota radiale anti-z-fighting confini europei |
 | `easeOutQuart(t)` | $1 - (1 - t)^4$ | Tracciamento progressivo fluido di archi e reveal |
 | **Attrito Inerziale** | $v_{t+1} = 0.94 \cdot v_t$ | Smorzamento cinetico al rilascio del globo |
+| **Archi a Regime** | $\lceil T_{\text{life}} / T_{\text{interval}} \rceil \cdot K$ | Densità volumetrica di linee contemporanee |
+

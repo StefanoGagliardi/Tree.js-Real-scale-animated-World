@@ -3,16 +3,26 @@ import {
   PointLight,
   Group,
   ImageLoader,
+  Scene,
   Vector3,
   Mesh,
   MeshLambertMaterial,
   SphereGeometry,
   OrthographicCamera,
   TextureLoader,
+  WebGLRenderer,
 } from 'three';
 import GlobeDotsGroup from './GlobeClassDots';
 import DrawLinesClass from './GlobeClassLine';
 import GlobeClassAbstract from './GlobeClassAbstract';
+import GlobeEuropeBorders from './GlobeEuropeBorders';
+import {
+  ENABLE_EUROPE_BORDERS,
+  LINE_INTERVAL_MS,
+  LINE_LIFETIME_MS,
+  LINES_PER_CYCLE,
+  STATIC_LINE_COUNT,
+} from './GlobeConfig';
 import { LoadingPhase } from './GlobeTypes';
 import {
   ConvToDegree,
@@ -96,7 +106,7 @@ export class GlobeClass extends GlobeClassAbstract {
       }, 20),
         (this.isDragging = !1),
         (0 !== this.moveX || Math.abs(this.moveY) > 0) &&
-          this.throwGlobe(this.moveX, this.moveY),
+        this.throwGlobe(this.moveX, this.moveY),
         (this.oldMouseX = 0),
         (this.oldMouseY = 0),
         (this.moveX = 0),
@@ -122,22 +132,22 @@ export class GlobeClass extends GlobeClassAbstract {
 
     // User interaction
     this.handleTouchStart = (t: TouchEvent) => {
-  const i = t.touches[0] || t.changedTouches[0];
-  (this.oldMouseX = i.pageX),
-    (this.oldMouseY = i.pageY),
-    (this.mouse.x = i.pageX),
-    (this.mouse.y = i.pageY),
-    (this.touchStartX = i.pageX),
-    (this.touchStartY = i.pageY),
-    this.handleDragStart();
-};
+      const i = t.touches[0] || t.changedTouches[0];
+      (this.oldMouseX = i.pageX),
+        (this.oldMouseY = i.pageY),
+        (this.mouse.x = i.pageX),
+        (this.mouse.y = i.pageY),
+        (this.touchStartX = i.pageX),
+        (this.touchStartY = i.pageY),
+        this.handleDragStart();
+    };
     // User iteraction
     this.handleTouchMove = (t: TouchEvent) => {
-  const i = t.touches[0] || t.changedTouches[0];
-  (this.touchDistanceX = Math.abs(this.touchStartX - i.pageX)),
-    (this.touchDistanceY = Math.abs(this.touchStartY - i.pageY)),
+      const i = t.touches[0] || t.changedTouches[0];
+      (this.touchDistanceX = Math.abs(this.touchStartX - i.pageX)),
+        (this.touchDistanceY = Math.abs(this.touchStartY - i.pageY)),
         this.touchDistanceY > this.touchDistanceX ||
-          ((this.mouse.x = i.pageX),
+        ((this.mouse.x = i.pageX),
           (this.mouse.y = i.pageY),
           this.handleDragging());
     };
@@ -146,23 +156,23 @@ export class GlobeClass extends GlobeClassAbstract {
     this.handleDragging = () => {
       this.isDragging &&
         ((this.tension = 1 + Math.abs(this.oldRotationX)),
-        (this.tension **= this.tension),
-        (this.moveX = -0.003 * (this.oldMouseX - this.mouse.x)),
-        (this.moveY =
-          (-0.003 * (this.oldMouseY - this.mouse.y)) / this.tension),
-        (this.newRotationY = this.resetRevolutions(
-          this.oldRotationY + this.moveX
-        )),
-        (this.newRotationX = Math.max(
-          Q,
-          Math.min(B, this.oldRotationX + this.moveY)
-        )),
-        (this.globeContainer.rotation.y = this.newRotationY),
-        (this.globeContainer.rotation.x = this.newRotationX),
-        (this.oldRotationY = this.newRotationY),
-        (this.oldRotationX = this.newRotationX),
-        (this.oldMouseX = this.mouse.x),
-        (this.oldMouseY = this.mouse.y));
+          (this.tension **= this.tension),
+          (this.moveX = -0.003 * (this.oldMouseX - this.mouse.x)),
+          (this.moveY =
+            (-0.003 * (this.oldMouseY - this.mouse.y)) / this.tension),
+          (this.newRotationY = this.resetRevolutions(
+            this.oldRotationY + this.moveX
+          )),
+          (this.newRotationX = Math.max(
+            Q,
+            Math.min(B, this.oldRotationX + this.moveY)
+          )),
+          (this.globeContainer.rotation.y = this.newRotationY),
+          (this.globeContainer.rotation.x = this.newRotationX),
+          (this.oldRotationY = this.newRotationY),
+          (this.oldRotationX = this.newRotationX),
+          (this.oldMouseX = this.mouse.x),
+          (this.oldMouseY = this.mouse.y));
     };
   };
 
@@ -206,11 +216,18 @@ export class GlobeClass extends GlobeClassAbstract {
   };
 
   /**
-   * Generate WebGL Render object and append generated canvas
+   * Crea il WebGLRenderer e la Scene Three.js, poi configura il renderer e appende il canvas al DOM.
+   * L'istanziazione avviene qui (nella classe concreta) e non nella classe astratta,
+   * rispettando il principio per cui GlobeClassAbstract definisce il contratto
+   * mentre GlobeClass fornisce l'implementazione concreta.
    * https://threejs.org/docs/#api/en/renderers/WebGLRenderer
    */
   public addRenderer = (): void => {
-    // this.renderer = new WebGLRenderer({ antialias: !1, alpha: !0 });
+    // Istanzia il renderer WebGL (antialiasing disattivato per performance, sfondo trasparente)
+    this.renderer = new WebGLRenderer({ antialias: false, alpha: true });
+
+    // Istanzia la scena Three.js che conterrà tutti gli oggetti, le luci e la camera
+    this.scene = new Scene();
 
     // Sets device pixel ratio. This is usually used for HiDPI device to prevent bluring output canvas.
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -235,7 +252,9 @@ export class GlobeClass extends GlobeClassAbstract {
    * A light that gets emitted from a single point in all directions. A common use case for this is to replicate the light emitted from a bare lightbulb.
    */
   public addLighting = (): void => {
-    const GlobalLight = new AmbientLight(10086140, 1); // new AmbientLight(Color, Alpha);
+
+    // Colore decimale: 10086140
+    const GlobalLight = new AmbientLight('#99e6fc', 1); // new AmbientLight(Color, Alpha);
     // @see https://github.com/mrdoob/three.js/blob/dev/src/math/Color.js
     // b: 0.9882352941176471
     // g: 0.9019607843137255
@@ -244,7 +263,10 @@ export class GlobeClass extends GlobeClassAbstract {
     // Add global light to Scene
     this.scene.add(GlobalLight);
 
-    const FirstPointLight: PointLight = new PointLight(12775677, 2, 0, 2);
+    // Colore decimale: 10086140
+    //'#' + (10086140).toString(16).padStart(6, '0')
+    // Output: "#99e67c"
+    const FirstPointLight: PointLight = new PointLight('#99e6fc', 2, 0, 2);
     FirstPointLight.position.set(-1000, -1100, -3300);
     this.scene.add(FirstPointLight);
 
@@ -276,6 +298,11 @@ export class GlobeClass extends GlobeClassAbstract {
     // Set globe color fill
     if (!this.disableGlobeFill) {
       this.addGlobeFill();
+    }
+
+    // Aggiunge i confini degli stati europei (linee blu sottili)
+    if (ENABLE_EUROPE_BORDERS) {
+      this.addEuropeBorders();
     }
 
     /**
@@ -345,6 +372,26 @@ export class GlobeClass extends GlobeClassAbstract {
   };
 
   /**
+   * Istanzia e aggiunge i confini degli stati europei al contenitore del globo.
+   * Le linee vengono tracciate come LineSegments sottili in tonalità azzurro/blu tech.
+   */
+  public addEuropeBorders = (): void => {
+    this.europeBorders = new GlobeEuropeBorders(
+      this.globeRadius,
+      () => {
+        // Se il globo è già mostrato o statico, aggiorna subito l'opacità
+        if (this.isRevealed || this.isStatic) {
+          this.europeBorders?.setOpacity(1);
+        }
+      },
+      0x38bdf8 // Blu/Azzurro tech brillante (#38bdf8 / Sky-400)
+    );
+
+    // Aggiunge i confini al contenitore principale del globo, così ruotano all'unisono
+    this.globeContainer.add(this.europeBorders);
+  };
+
+  /**
    * Push phase to already loaded object, if loaded length is same of total phase
    * se global parametry: isLoaded = true
    */
@@ -362,7 +409,7 @@ export class GlobeClass extends GlobeClassAbstract {
   public addListeners = (): void => {
     window.addEventListener('resize', this.handleResize),
       this.isStatic ||
-        (window.addEventListener('mouseup', this.handleMouseUp),
+      (window.addEventListener('mouseup', this.handleMouseUp),
         window.addEventListener('mousemove', this.handleMouseMove),
         this.el.addEventListener('touchstart', this.handleTouchStart, {
           passive: !0,
@@ -505,6 +552,11 @@ export class GlobeClass extends GlobeClassAbstract {
       this.globeFillMaterial.opacity = 0.94 * animationDelta;
     }
 
+    // Sfuma gradualmente i confini europei durante il reveal
+    if (this.europeBorders) {
+      this.europeBorders.setOpacity(animationDelta);
+    }
+
     this.globeRotationIncrement =
       0.02 * (1 - animationDelta) + 0.001 * animationDelta;
     if (animationDelta > 0.999) {
@@ -523,10 +575,10 @@ export class GlobeClass extends GlobeClassAbstract {
     (this.globeContainer.rotation.y = this.resetRevolutions(a)),
       (this.globeContainer.rotation.x = n),
       (Math.abs(e) > 0.001 || Math.abs(s) > 0.001) &&
-        !1 === this.isDragging &&
-        (this.throwAnimationFrame = requestAnimationFrame(() => {
-          this.throwGlobe(e, s);
-        }));
+      !1 === this.isDragging &&
+      (this.throwAnimationFrame = requestAnimationFrame(() => {
+        this.throwGlobe(e, s);
+      }));
   };
 
   /**
@@ -581,116 +633,125 @@ export class GlobeClass extends GlobeClassAbstract {
    * 2. Non-static: set interval each second call drawLine()
    */
   public drawLines = (): void => {
-    // Se NON-STATIC setto l'animazone infinita
+    // Se NON-STATIC setta l'intervallo con frequenza e quantità configurate
     if (!this.isStatic) {
       clearInterval(this.lineInterval);
       this.lineInterval = setInterval(() => {
-        // Ogni secondo cade sempree solo qui
-        this.drawLine();
-      }, 1000);
+        for (let i = 0; i < LINES_PER_CYCLE; i++) {
+          this.drawLine();
+        }
+      }, LINE_INTERVAL_MS);
       return;
     }
 
     // Static CASE
-    // Cado qui solo se il Globo è statico e disegno 5 linee
+    // Cado qui solo se il Globo è statico e disegno le linee impostate
     if (0 === this.lineCount) {
-      for (let t = 0; t < 5; t += 1) {
+      for (let t = 0; t < STATIC_LINE_COUNT; t += 1) {
         this.drawLine();
       }
     }
   };
 
   /**
-   * Draw and set animation for single line object
+   * Crea e anima una singola linea/arco di connessione tra due paesi.
+   *
+   * Flusso logico:
+   * 1. Calcola l'angolo di rotazione Y normalizzato del globo.
+   * 2. Seleziona una coppia di paesi (origine e destinazione) in base alla rotazione attuale,
+   *    garantendo che l'arco venga tracciato sulla faccia del globo visibile all'utente.
+   * 3. Verifica che il paese di partenza non coincida con quello di arrivo; se coincidono, riprova.
+   * 4. Recupera le coordinate geografiche (Lat/Lng) e il colore dell'arco.
+   * 5. Istanzia la geometria 3D tramite DrawLinesClass e la aggiunge alla scena.
+   * 6. Se non in modalità statica, programma la dissoluzione e rimozione dell'arco dopo un intervallo.
    */
   public drawLine = (): void => {
-    // Increase active
+    // Incrementa il contatore delle linee generate (usato per ciclare tra paesi, texture e colori)
     this.lineCount += 1;
 
+    // Normalizza la rotazione Y del globo nell'intervallo [0, 2*PI]
     const globeRotationY = this.resetRevolutions(
       this.globeContainer.rotation.y
     );
 
-    // Get first country to link in list based to total lines count
+    // Paese di partenza iniziale (ciclato dalla lista generale)
     let countryListPair =
       this.countryList[this.lineCount % this.countryList.length];
 
-    // Get second country to link in list based to total lines count
+    // Paese di arrivo iniziale (ciclato dalla lista globale live)
     let liveCountryListPair =
       this.liveCountryList[this.lineCount % this.liveCountryList.length];
 
-    // IN base alla rotazione y del globo setto la direzione
-    // Per ogni coppia controllo che sia dentro la parte visibile
-
-    //   if (
-    //     ((t < 5.7 && t > 4.4) || (t > -2 && t < -0.2)
-    //         ? (s = this.eastCountryList[this.lineCount % this.eastCountryList.length])
-    //         : (t < 4.2 && t > 2.2) || (t > -4 && t < -1.7)
-    //         ? (((t < -1.7 && t > -3) || (t > 3 && t < 4.2)) && (e = this.eastCountryList[this.lineCount % this.eastCountryList.length]), (s = this.westCountryList[this.lineCount % this.westCountryList.length]))
-    //         : ((t < 2.2 && t > 0.3) || (t > -6.28 && t < -4)) && (s = this.middleCountryList[this.lineCount % this.middleCountryList.length]),
-    //     e === s)
-    // )
-    //     return void this.drawLine();
-
+    // Selezione dinamica dei paesi in base all'angolo di rotazione del globo:
+    // Permette di mostrare connessioni solo tra paesi attualmente rivolti verso la telecamera.
     if (
-      ((globeRotationY < 5.7 && globeRotationY > 4.4) ||
-      (globeRotationY > -2 && globeRotationY < -0.2)
-        ? (liveCountryListPair =
+      (
+        // Fascia 1: Visibili principalmente i paesi dell'Est (Asia, Oceania)
+        (globeRotationY < 5.7 && globeRotationY > 4.4) ||
+          (globeRotationY > -2 && globeRotationY < -0.2)
+          ? (liveCountryListPair =
             this.eastCountryList[this.lineCount % this.eastCountryList.length])
-        : (globeRotationY < 4.2 && globeRotationY > 2.2) ||
-          (globeRotationY > -4 && globeRotationY < -1.7)
-        ? (((globeRotationY < -1.7 && globeRotationY > -3) ||
-            (globeRotationY > 3 && globeRotationY < 4.2)) &&
-            (countryListPair =
-              this.eastCountryList[
+          // Fascia 2: Visibili le Americhe (Ovest) ed eventualmente l'Est in rotazione
+          : (globeRotationY < 4.2 && globeRotationY > 2.2) ||
+            (globeRotationY > -4 && globeRotationY < -1.7)
+            ? (((globeRotationY < -1.7 && globeRotationY > -3) ||
+              (globeRotationY > 3 && globeRotationY < 4.2)) &&
+              (countryListPair =
+                this.eastCountryList[
                 this.lineCount % this.eastCountryList.length
-              ]),
-          (liveCountryListPair =
-            this.westCountryList[this.lineCount % this.westCountryList.length]))
-        : ((globeRotationY < 2.2 && globeRotationY > 0.3) ||
-            (globeRotationY > -6.28 && globeRotationY < -4)) &&
-          (liveCountryListPair =
-            this.middleCountryList[
+                ]),
+              (liveCountryListPair =
+                this.westCountryList[this.lineCount % this.westCountryList.length]))
+            // Fascia 3: Visibili Europa e Africa (zona centrale)
+            : ((globeRotationY < 2.2 && globeRotationY > 0.3) ||
+              (globeRotationY > -6.28 && globeRotationY < -4)) &&
+            (liveCountryListPair =
+              this.middleCountryList[
               this.lineCount % this.middleCountryList.length
-            ]),
-      countryListPair === liveCountryListPair)
+              ]),
+        // Se il paese di partenza coincide con quello di destinazione, salta e riprova
+        countryListPair === liveCountryListPair
+      )
     ) {
       return void this.drawLine();
     }
 
+    // Recupera le coordinate [lat, lng] dei due paesi
     const countryCoord = CountryCoords[countryListPair],
       liveCountryCoord = CountryCoords[liveCountryListPair],
+      // Cicla tra i gradienti/colori disponibili per gli archi
       colorIndex = this.lineCount % this.arcColors.length,
       arcColor = this.arcColors[colorIndex];
 
+    // Crea l'arco 3D (Cubic Bezier Tube + dischetti di approdo)
     const drawedLineObject = new DrawLinesClass(
-      countryCoord, // [number, number]
-      liveCountryCoord, // [number, number]
-      arcColor, // [number, number]
-      this.arcTextures[colorIndex as any], // Array with 4 element image
+      countryCoord,
+      liveCountryCoord,
+      arcColor,
+      this.arcTextures[colorIndex as any],
       this.circleTexture,
+      // Quota radiale leggermente sfalsata con rumore random per evitare z-fighting tra archi
       1.001 * this.globeRadius + 0.01 * Math.random(),
       this.isStatic
     );
 
-    // Add line to container
+    // Aggiunge l'arco al contenitore Three.js delle linee
     this.linesContainer.add(drawedLineObject);
 
-    // Push current line in internal state
+    // Registra la linea nello stato interno delle linee attive
     this.currentLines.push(drawedLineObject);
 
-    // Se non è statico setto un delay che dopo 1 secondo invoca la funzione
-    // hideLine() passando oggetto Linea
+    // Se non in modalità statica, programma la scomparsa e distruzione della linea
     this.isStatic ||
       Timing.delay(() => {
-        // Hide line
+        // Avvia l'animazione di riassorbimento/erase della linea
         this.hideLine(drawedLineObject);
-        // Found line index and remove, until recreation on next cycle
+        // Rimuove l'oggetto dall'array delle linee correnti
         const lineIndex = this.currentLines.indexOf(drawedLineObject);
         if (lineIndex > -1) {
           this.currentLines.splice(lineIndex, 1);
         }
-      }, 1000); // 4e3
+      }, LINE_LIFETIME_MS);
   };
 
   /**
@@ -713,21 +774,22 @@ export class GlobeClass extends GlobeClassAbstract {
 }
 
 /**
- * Calculate position for start line country
- * @returns
+ * Converte Latitudine e Longitudine geografiche in un Vettore Cartesiano 3D (X, Y, Z)
  */
 export function coordsToVector3D(
   lat: number,
   lng: number,
   radius: number
 ): Vector3 {
-  const s = (90 - lat) * ConvToRadia,
-    a = lng * ConvToRadia;
+  // Angolo polare dall'asse Y (polo nord = 0 rad, equatore = PI/2 rad, polo sud = PI rad)
+  const phiPolar = (90 - lat) * ConvToRadia; // oppure: colatitudeRad
 
+  // Angolo azimutale orizzontale attorno all'asse Y
+  const thetaAzimuth = lng * ConvToRadia;    // oppure: longitudeRad
   return new Vector3(
-    -radius * Math.sin(s) * Math.cos(a),
-    radius * Math.cos(s),
-    radius * Math.sin(s) * Math.sin(a)
+    -radius * Math.sin(phiPolar) * Math.cos(thetaAzimuth),
+    radius * Math.cos(phiPolar),
+    radius * Math.sin(phiPolar) * Math.sin(thetaAzimuth)
   );
 }
 

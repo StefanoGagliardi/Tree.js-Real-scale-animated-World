@@ -1,8 +1,8 @@
 // Declare mathematical constant
 export const Pi = Math.PI;
 export const PiMezzi = Pi / 2;
-export const ConvToDegree = 180 / Pi; // 1 Radiante = 180/Pi, per convertire in gradi: deg = rad * (180/Pi)
-export const ConvToRadia = Pi / 180; // 1 deg = Pi/180, per convertire in radianti: rad = deg * (Pi/180)
+export const ConvToDegree = 180 / Pi; // Gradi per radiante (~57.2958°). Uso: deg = rad * ConvToDegree
+export const ConvToRadia = Pi / 180;  // Radianti per grado (~0.01745 rad). Uso: rad = deg * ConvToRadia
 
 /**
  * Some Numbers helper functions

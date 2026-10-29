@@ -264,6 +264,51 @@ $$\text{Rot}_x = \text{clamp}(\text{Rot}_x + v_y, -\frac{\pi}{2}, \frac{\pi}{4})
 
 ---
 
+## 7. Geometria Vettoriale dei Confini Europei (`GlobeEuropeBorders.ts`)
+
+Per tracciare con massima nitidezza i confini politici degli stati europei sopra la sfera di punti, il modulo `GlobeEuropeBorders` converte i dati geografici vettoriali (`public/globe/europe.geojson`) in segmenti di linea tridimensionali.
+
+### A. Mappatura Vettoriale da Coordinate Geodetiche a Spazio Sferico 3D
+
+Ogni stato europeo è definito da poligoni (o multipoligoni per isole ed enclavi) composti da anelli di coordinate WGS84:
+$$P_i = (\lambda_i, \phi_i) \quad \text{con } \lambda_i = \text{Longitudine}, \; \phi_i = \text{Latitudine}$$
+
+Per ogni segmento tra due vertici contigui $P_i$ e $P_{i+1}$, i punti vengono proiettati sulla superficie sferica a quota sopraelevata $R_{\text{borders}}$:
+
+$$\theta_i = (90^\circ - \phi_i) \cdot \frac{\pi}{180}, \quad \psi_i = \lambda_i \cdot \frac{\pi}{180}$$
+
+$$\vec{V}_i = \begin{pmatrix} -R_{\text{borders}} \cdot \sin(\theta_i) \cdot \cos(\psi_i) \\ R_{\text{borders}} \cdot \cos(\theta_i) \\ R_{\text{borders}} \cdot \sin(\theta_i) \cdot \sin(\psi_i) \end{pmatrix}$$
+
+### B. Risoluzione dell'Interferenza Radiale (Offset Anti-Z-Fighting)
+
+I pallini della terraferma giacciono a quota radiale nominale $R$. Disegnare le linee esattamente su $R$ causerebbe interferenza visiva con i dischi esagonali dei nodi.
+Viene quindi applicato un fattore moltiplicativo di sicurezza:
+
+$$R_{\text{borders}} = 1.0012 \cdot R_{\text{globe}}$$
+
+Questo differenziale di $+0.12\%$ garantisce la perfetta fluttuazione ottica dei confini sopra i pallini da qualsiasi angolo di visuale.
+
+### C. Unificazione Geometrica GPU (Single Draw Call)
+
+Tutti i segmenti dei 51 paesi europei vengono accorpati in un unico `Float32BufferAttribute` continuo associato a una `BufferGeometry` con topologia `LineSegments`:
+
+* **Rendering GPU**: 1 sola Draw Call per decine di migliaia di vertici.
+* **Materiale**: `LineBasicMaterial` con colore `#38bdf8` (Azzurro Sky-400), `transparent: true`, `opacity: 0.65` e `depthWrite: false`.
+
+---
+
+## 8. Modulazione di Frequenza e Durata degli Archi (`GlobeConfig.ts`)
+
+La densità volumetrica di linee contemporaneamente visibili a regime sul globo ($\bar{N}_{\text{linee}}$) è governata dalla legge:
+
+$$\bar{N}_{\text{linee}} = \left\lceil \frac{\text{LINE\_LIFETIME\_MS}}{\text{LINE\_INTERVAL\_MS}} \right\rceil \cdot \text{LINES\_PER\_CYCLE}$$
+
+* **Frequenza di Emissione** (`LINE_INTERVAL_MS = 600ms`): intervallo del timer asincrono `setInterval`.
+* **Persistenza Visiva** (`LINE_LIFETIME_MS = 3000ms`): ritardo temporale impostato tramite `Timing.delay` prima che si attivi l'animazione di riassorbimento `hideLine()`.
+* **Archi Simultanei**: con i parametri correnti, sul globo ruotano stabilmente circa $5$ archi contemporanei in differenti fasi temporali.
+
+---
+
 ## 🌟 1. Panoramica della Struttura del Progetto
 
 Il progetto è strutturato seguendo i principi della programmazione ad oggetti (OOP) in TypeScript, sfruttando l'estensione della classe `Group` di Three.js per dividere le responsabilità:
@@ -271,7 +316,9 @@ Il progetto è strutturato seguendo i principi della programmazione ad oggetti (
 * **`GlobeClassAbstract` & `GlobeClass**`: Il punto di ingresso principale. Gestisce la scena Three.js, la fotocamera ortografica, le luci e la responsività (drag/touch/resize).
 * **`GlobeClassDotsAbstract` & `GlobeDotsGroup**`: Gestisce la generazione del globo formato da decine di migliaia di punti (dot) ricavati da una mappa B/W, renderizzati in modo ultra-performante tramite `BufferGeometry` e custom `ShaderMaterial`.
 * **`GlobeClassLineAbstract` & `DrawLinesClass**`: Gestisce gli archi di connessione animati tra diverse nazioni del mondo, calcolando curve di Bézier 3D sul globo.
+* **`GlobeEuropeBorders`**: Gestisce il tracciamento vettoriale 3D dei confini di tutti i 51 stati europei a partire da un dataset GeoJSON ottimizzato, renderizzati in un'unica `BufferGeometry` con `LineSegments`.
 * **`GlobeHelpers`**: Utility matematiche, formule trigonometriche per la conversione di coordinate geografiche (Lat/Lng) in vettori 3D, e funzioni di *easing*.
+* **`GlobeConfig`**: Parametri di controllo globale (densità nodi, modalità statica, frequenza e durata archi, attivazione confini europei).
 
 ---
 
