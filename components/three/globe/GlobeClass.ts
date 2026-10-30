@@ -345,6 +345,9 @@ export class GlobeClass extends GlobeClassAbstract {
     });
 
     // Add Custom (extended) group to scene
+    // Il tipo di globeDots è la classe, ma che se scavi alla base è 
+    // un estensione del tipo di ThreeJs 'Group', che è oggetto necessario
+    // per usare metodo add di three per estendere la 'scene' iniziale
     this.globeMap.add(this.globeDots);
   };
 
@@ -781,11 +784,22 @@ export function coordsToVector3D(
   lng: number,
   radius: number
 ): Vector3 {
-  // Angolo polare dall'asse Y (polo nord = 0 rad, equatore = PI/2 rad, polo sud = PI rad)
+
+  // È l'angolo misurato partendo dall'Asse Y (Polo Nord) verso il basso:
+  // Angolo IN RADIANTI  polare dall'asse Y (polo nord = 0 rad, equatore = PI/2 rad, polo sud = PI rad)
   const phiPolar = (90 - lat) * ConvToRadia; // oppure: colatitudeRad
 
-  // Angolo azimutale orizzontale attorno all'asse Y
+  // Angolo IN RADIANTI azimutale orizzontale attorno all'asse Y
   const thetaAzimuth = lng * ConvToRadia;    // oppure: longitudeRad
+
+  /* +X sposta destra, +Y sposta in alto, +Z viene verso utente uscendo dalla vista
+   
+   Spiegazione segno - sul primo valore X:
+   Convenzionalmente in cartografia, se ci si sposta a Est (longitudine positiva), 
+   ci si muove in senso antiorario visto dall'alto. Applicando il segno meno a $X$, 
+   la funzione orienta il globo in modo che il meridiano $È l'angolo misurato partendo dall'Asse Y (Polo Nord) verso il basso:0^\circ$ punti verso la camera 
+   e che le longitudini positive vadano verso la giusta direzione visiva.  
+   */
   return new Vector3(
     -radius * Math.sin(phiPolar) * Math.cos(thetaAzimuth),
     radius * Math.cos(phiPolar),

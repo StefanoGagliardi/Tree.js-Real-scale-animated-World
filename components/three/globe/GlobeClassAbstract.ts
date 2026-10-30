@@ -3,6 +3,7 @@ import GlobeClassInterface, { LoadingPhase } from './GlobeTypes';
 import { CountryCoords } from './GlobeHelpers';
 import { DISABLE_FILL, DISABLE_LINES, IS_STATIC } from './GlobeConfig';
 import DrawLinesClass from './GlobeClassLine';
+import type GlobeDotsGroup from './GlobeClassDots';
 
 /**
  * Abstract class - https://www.tutorialsteacher.com/typescript/abstract-class
@@ -76,7 +77,7 @@ abstract class GlobeClassAbstract implements GlobeClassInterface {
   /**
    * This is a class that extend Three.js Group for map dots Object
    */
-  public globeDots: any;
+  public globeDots!: GlobeDotsGroup;
 
   /**
    * Globe, sphere radius (Raggio sfera nel canvas):

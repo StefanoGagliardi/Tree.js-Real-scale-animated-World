@@ -164,7 +164,7 @@ class GlobeDotsGroup extends GlobeClassDotsAbstract {
       ? DotsDensity // 20.000
       : 10000 + Math.floor((this.radius / 600) * 70000); // 76.966
 
-    /**
+    /**getImagePixelColor
      * CircleGeometry - https://threejs.org/docs/#api/en/geometries/CircleGeometry4
      * radius — Radius of the circle, default = 1.
      * segments — Number of segments (triangles), minimum = 3, default = 8.
@@ -237,7 +237,8 @@ class GlobeDotsGroup extends GlobeClassDotsAbstract {
         firstBufferGeometry.boundingSphere.center,
         this.position
       );
-      const imagePixelColor: Uint8ClampedArray = getImagePixelColor(
+      const imagePixelColor: Uint8ClampedArray = 
+      getImagePixelColor(
         dotCoords,
         imageData
       );
@@ -340,9 +341,17 @@ function getImagePixelColor(
   const imgWidth = imageData.width;
   const imgHeight = imageData.height;
 
+  // t: Vector 2
+  // ha due indici x,y normalizzati tra 0.0 e 1.0
+  // t.x e t.y sono le coordinate normalizzate del pallino, che ho calcolato prima in getDotCoords()
+  //
   const a =
+    // Calcola la posizione nell'array dove inizia la riga che ci interessa
     4 * Math.floor(t.x * imgWidth) +
+    // calcola la posizione nell'array saltando tutte le righe fino a quella che interessa
     Math.floor(t.y * imgHeight) * (4 * imgWidth);
+  
+  // Ritorna l'array dei 4 valori RGBA
   return imageData.data.slice(a, a + 4);
 }
 

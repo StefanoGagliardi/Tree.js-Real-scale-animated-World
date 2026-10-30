@@ -5,8 +5,8 @@
  * coordsToVector3D esportata da GlobeClass.ts.
  *
  * Cosa verifichiamo:
- * - Costanti matematiche (ConvToRadia, ConvToDegree, PiMezzi)
- * - coordsToVector3D: conversione lat/lng → Vector3 cartesiano
+ * - 1. Costanti matematiche (ConvToRadia, ConvToDegree, PiMezzi)
+ * - 2. coordsToVector3D: conversione lat/lng → Vector3 cartesiano
  * - Easing.easeOutQuart: curva di easing per l'animazione reveal
  * - Timing.delay: invocazione del callback dopo il ritardo
  * - GlobeConfig: valori di configurazione presenti e tipizzati correttamente
@@ -18,7 +18,9 @@ import { coordsToVector3D } from '@/components/three/globe/GlobeClass';
 import { Vector3 } from 'three';
 
 // ---------------------------------------------------------------------------
+// 1.
 // Suite: Costanti matematiche
+// test banali, copiando le moltiplicazioni delle costanti testano le divisioni il pc faccia bene
 // ---------------------------------------------------------------------------
 describe('GlobeHelpers – Costanti matematiche', () => {
 
@@ -48,6 +50,7 @@ describe('GlobeHelpers – Costanti matematiche', () => {
 });
 
 // ---------------------------------------------------------------------------
+// 2.
 // Suite: coordsToVector3D
 // ---------------------------------------------------------------------------
 describe('GlobeClass – coordsToVector3D (lat/lng → Vector3 cartesiano)', () => {

@@ -25,14 +25,14 @@ abstract class GlobeClassDotsAbstract extends Group {
   public isStatic: boolean;
 
   /**
-   * @TODO Array to undersand
+   * Array lineare di coordinate dei vertici (x, y, z) per BufferGeometry('position', 3)
    */
-  public r: any[];
+  public r: number[];
 
   /**
-   * @TODO Array to undersand
+   * Array di identificatori casuali (rndId) per ShaderMaterial ('rndId', 1)
    */
-  public h: any[];
+  public h: number[];
 
   /**
    * Set if render static globe image

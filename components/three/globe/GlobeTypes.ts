@@ -2,6 +2,8 @@ import { Group, Scene, Vector2, WebGLRenderer } from 'three';
 
 export type LoadingPhase = 'scene' | 'globeDots' | 'x';
 
+import type GlobeDotsGroup from './GlobeClassDots';
+
 export default interface GlobeClassInterface {
   /**
    * Array with loading phase
@@ -80,7 +82,7 @@ export default interface GlobeClassInterface {
   /**
    * This is a class that extend Three.js Group for map dots Object
    */
-  globeDots: any; // Define Type: ExtendGroup
+  globeDots: GlobeDotsGroup;
 
   /**
    * Loaded object
